@@ -16,7 +16,7 @@ class CNNModel(object):
         self.CONV1_SIZE = int(config['CNN_CONFIGURATION']['CONV1_SIZE'])
         self.CONV2_SIZE = int(config['CNN_CONFIGURATION']['CONV2_SIZE'])
         self.NUM_CLASSES = int(config['CNN_CONFIGURATION']['NUM_CLASSES'])
-        self.INPUT_SHAPE = X[1].shape
+        self.INPUT_SHAPE = X.shape
         
     def build_model(self):
         """
@@ -26,11 +26,11 @@ class CNNModel(object):
         """
         model = Sequential()
         model.add(Conv2D(32, (self.CONV1_SIZE , self.CONV1_SIZE ), activation='relu', input_shape=self.INPUT_SHAPE))
-        model.add(Conv2D(64, (self.CONV1_SIZE, self.CONV1_SIZE), activation='relu'))
+        model.add(Conv2D(32, (self.CONV1_SIZE, self.CONV1_SIZE), activation='relu'))
         model.add(MaxPooling2D(pool_size=(self.CONV2_SIZE , self.CONV2_SIZE )))
         model.add(Dropout(0.25))
         
-        model.add(Conv2D(128, (self.CONV1_SIZE, self.CONV1_SIZE), activation='relu'))
+        model.add(Conv2D(64, (self.CONV1_SIZE, self.CONV1_SIZE), activation='relu'))
         model.add(Conv2D(64, (self.CONV1_SIZE, self.CONV1_SIZE), activation='relu'))
         model.add(MaxPooling2D(pool_size=(self.CONV2_SIZE , self.CONV2_SIZE )))
         model.add(Dropout(0.25))

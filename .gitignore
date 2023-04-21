@@ -103,8 +103,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-input/dataset\.hdf5
-
-input/images/
+input/
 
 .DS_Store

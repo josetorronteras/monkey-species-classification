@@ -1,30 +1,32 @@
 import os
 from os.path import join
+
+import h5py
 import numpy as np
 import pandas as pd
-import h5py
-
-from keras.preprocessing import image
 from keras.applications import xception
+from keras.preprocessing import image
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
-
 
 class GetTrainTestData(object):
 
     def __init__(self, config):
-        
+        """
+        Initialize the GetTrainTestData class
+        Args:
+            config: Configuration file
+        """
         self.PATH = config['PATH_CONFIGURATION']['DATASET_PATH']
         self.IMAGES_PATH = config['PATH_CONFIGURATION']['IMAGES_PATH']
         self.SIZE = int(config['IMAGE_FEATURES']['SIZE'])
-        # Configuración de los datos
         self.SPLIT_SIZE = float(config['DATA_CONFIGURATION']['SPLIT_SIZE'])
 
     def getGenres(self):
         """
-            Recoge los géneros del fichero de labels del dataset.
-            # Return:
-                genres: Array con las especies de los monos del dataset.
+        Get the genres from the dataset
+        Return:
+            genres: list
         """
         labels = pd.read_csv(join(self.PATH, 'monkey_labels.txt'))
         columns_new = ['Label', 'Latin_Name', 'Common_Name', 'Train_Images', 'Validation_Images']
@@ -36,9 +38,11 @@ class GetTrainTestData(object):
 
     def preprocessImage(self, path):
         """
-            Preprocesamos cada imagen haciendo uso de xception
-            # Return:
-                img: Imagen ya preprocesada
+        Preprocess the image
+        Args:
+            path: string Path of the image
+        Return:
+            img: np.array
         """
         img = image.load_img(path, target_size=(self.SIZE, self.SIZE))
         img = image.img_to_array(img)
@@ -47,28 +51,30 @@ class GetTrainTestData(object):
     
 
     def createDataset(self):
-
-        # Obtenemos una lista de los directorios
+        """
+        Create the dataset
+        """
+        # We obtain a list of directories
         directorios = [nombre_directorio for nombre_directorio in os.listdir(self.IMAGES_PATH) \
                         if os.path.isdir(os.path.join(self.IMAGES_PATH, nombre_directorio))]
         directorios.sort()
         directorios.insert(0, directorios[0])
 
-        # Escribimos el Dataset Preprocesado en formato h5py
+        # We write the Preprocessed Dataset in h5py format
         with h5py.File(self.PATH + 'dataset.hdf5', 'w') as hdf:            
 
             for root, subdirs, images in os.walk(self.IMAGES_PATH):
-                # Ordenamos las carpetas por orden alfabético
+                # Sort the folders in alphabetical order
                 subdirs.sort() # Sort all subdirs
 
                 try:
-                    # Creamos un nuevo grupo con el nombre del directorio en el que estamos.
+                    # We create a new group with the name of the directory we are in.
                     group_hdf = hdf.create_group(directorios[0]) 
                 except Exception as e:
                     print("Error accured " + str(e))
 
                 for img in tqdm(images):
-                     # Descartamos otros ficheros .DS_store
+                     # We discard other files .DS_store
                     if img.endswith('.jpg'):
                         try:
                             file_Path = os.path.join(root, img)
@@ -76,29 +82,26 @@ class GetTrainTestData(object):
                             group_hdf.create_dataset(
                                 img,
                                 data=npy_image,
-                                compression='gzip') # Incluimos el fichero numpy en el dataset.
+                                compression='gzip') # We include the numpy file in the dataset.
                         except Exception as e:
                             print("Error accured" + str(e))
-                directorios.n7(0) # Next directorio
+                directorios.n7(0) # Next directory
 
     def getDataFromDataset(self, specie, dataset_file):
         """
-            Recoge la imagen del archivo h5py
-            # Arguments:
-                specie: string
-                    Nombre de la especie del que se desea obtener los arrays.
-                dataset_file: h5py File
-                    Dataset File que contiene los datos preprocesados.
-            # Return:
-                read_data: list(np.array)
-                    Lista que contiene todos los arrays de la especie seleccionada.
+        Get the data from the dataset
+        Args:
+            specie: string
+            dataset_file: h5py file
+        Return:
+            read_data: list
         """
         # Lista que acumula los datos leidos del conjunto de datos.
         read_data = []
 
-        print("Obteniendo.." + self.PATH + specie)
+        print(self.PATH + specie)
 
-        # Leemos los datos
+        # Read the data from the dataset
         for items in tqdm(dataset_file[specie]):
             read_data.append((dataset_file[specie][items][()]))
 
@@ -108,7 +111,7 @@ class GetTrainTestData(object):
 
         dataset_file = h5py.File(self.PATH + 'dataset.hdf5', 'r')
 
-        # Obtenemos las imagenes de cada especie
+        # We obtain the images of each species
         arr_n0 = self.getDataFromDataset('n0', dataset_file)
         arr_n1 = self.getDataFromDataset('n1', dataset_file)
         arr_n2 = self.getDataFromDataset('n2', dataset_file)
@@ -120,7 +123,7 @@ class GetTrainTestData(object):
         arr_n8 = self.getDataFromDataset('n8', dataset_file)
         arr_n9 = self.getDataFromDataset('n9', dataset_file)
 
-        # Los agrupamos
+        # Group the data
         full_data = np.vstack((arr_n0,\
                             arr_n1,\
                             arr_n2,\
@@ -132,7 +135,7 @@ class GetTrainTestData(object):
                             arr_n8,\
                             arr_n9))
 
-        # Establecemos las etiquetas que identifican el género musical
+        # We establish the labels that identify each species
         labels = np.concatenate((np.zeros(len(arr_n0)),\
                                 np.ones(len(arr_n1)),\
                                 np.full(len(arr_n2), 2),\
@@ -144,11 +147,10 @@ class GetTrainTestData(object):
                                 np.full(len(arr_n8), 8),\
                                 np.full(len(arr_n9), 9)))
 
-        # Con train_test_split() dividimos los datos.
-        # Se puede cambiar el tamaño en el archivo config.
-        print("test-size = " + str(self.SPLIT_SIZE) + " Cambiar valor en config.py")
+        # With train_test_split we divide the data into training and test sets.
+        print("test-size = " + str(self.SPLIT_SIZE) + " change value in config.py")
 
-        # Dividimos los datos, en función a SPLIT_SIZE (config)
+        # We divide the data into training, test and validation sets.
         X_train, X_test, y_train, y_test = train_test_split(
             full_data,
             labels,
@@ -161,8 +163,8 @@ class GetTrainTestData(object):
             test_size=0.5,
             stratify=y_test)
 
-        print("X_train Tamaño: %s - X_test Tamaño: %s - X_val Tamaño: %s\
-              - y_train Tamaño: %s - y_test Tamaño: %s - y_val Tamaño: %s " % \
+        print("X_train Size: %s - X_test Size: %s - X_val Size: %s\
+              - y_train Size: %s - y_test Size: %s - y_val Size: %s " % \
              (X_train.shape, X_test.shape, X_val.shape, y_train.shape, y_test.shape, y_val.shape))
 
         return X_train, X_test, X_val, y_train, y_test, y_val

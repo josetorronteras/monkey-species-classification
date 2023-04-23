@@ -1,20 +1,20 @@
 # Monkey Species Classification
-###  Project carried out by José Jesús Torronteras Hernández, for University of  Rome  "La Sapienza"
  
-<br>
-
 ## Table of contents
 - [Quick start](#quick-start)
+- [Description](#description)
 - [Project Structure](#project-structure)
 - [Usage](#usage)
 
 ## Quick start
-
 It is necessary to have installed: Python 3.5.2 and download [Monkey Species Dataset](https://www.kaggle.com/slothkong/10-monkey-species) in Input Folder.
 
 The present code has been developed under python3 using Anaconda Notebook. The simplest way to run the program is opening the notebook.
 
-[Monkey Species Classification Notebook Training](./notebooks/Train%20Model.ipynb)
+[Monkey Species Classification Notebook Training](./notebooks/Monkey%20species%20classification.ipynb)
+
+## Description
+The project consists of a convolutional neural network that classifies 10 different monkey species. The dataset used is the [Monkey Species Dataset](https://www.kaggle.com/slothkong/10-monkey-species) from Kaggle. The model has been trained using the Keras library and the Tensorflow backend. The model has been trained using the Adam optimizer and the categorical crossentropy loss function. The model has been trained for 100 epochs with a batch size of 32. 
 
 ## Project Structure
 

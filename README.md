@@ -5,6 +5,7 @@
 - [Description](#description)
 - [Project Structure](#project-structure)
 - [Usage](#usage)
+- [Results](#results)
 
 ## Quick start
 It is necessary to have installed: Python 3.5.2 and download [Monkey Species Dataset](https://www.kaggle.com/slothkong/10-monkey-species) in Input Folder.
@@ -43,3 +44,7 @@ source env/bin/activate
 pip install -r requirements.txt
 open jupyter notebook
 ```
+
+## Results
+![Accuracy](./logs/accuracy.png)
+![Loss](./logs/loss.png)

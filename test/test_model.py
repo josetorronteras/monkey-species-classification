@@ -1,5 +1,5 @@
 import pytest
-from source.cnn_model import CNNModel
+from ..source.cnn_model import CNNModel
 
 def test_model_creation():
     config = {

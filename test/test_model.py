@@ -1,4 +1,4 @@
-from cnn_model import CNNModel
+from source.cnn_model import CNNModel
 import configparser
 
 config = configparser.ConfigParser()

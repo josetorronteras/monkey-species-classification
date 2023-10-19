@@ -1,4 +1,4 @@
-from preprocessing_images import PreprocessingImages
+from  source.preprocessing_images import PreprocessingImages
 import configparser
 
 # Cargar configuración para pruebas

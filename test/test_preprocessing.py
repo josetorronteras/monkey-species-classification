@@ -1,5 +1,6 @@
 import pytest
 from source.preprocessing_images import PreprocessingImages
+import os
 
 @pytest.mark.parametrize("config", [
     (
@@ -15,6 +16,7 @@ from source.preprocessing_images import PreprocessingImages
     ),
 ])
 def test_preprocessing_images(config):
+    print("Directorio de Trabajo Actual:", os.getcwd())
     preprocessing = PreprocessingImages(config)
     train_generator, validation_generator = preprocessing.preprocessImages()
 

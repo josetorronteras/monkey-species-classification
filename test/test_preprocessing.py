@@ -6,8 +6,8 @@ import os
     (
         {
             'PATH_CONFIGURATION': {
-                'TRAIN_IMAGES_PATH': '../tests/images/training',
-                'VALIDATION_IMAGES_PATH': '../tests/images/validation'
+                'TRAIN_IMAGES_PATH': '/tests/images/training',
+                'VALIDATION_IMAGES_PATH': '/tests/images/validation'
             },
             'IMAGE_FEATURES': {
                 'SIZE': '150'
@@ -17,6 +17,7 @@ import os
 ])
 def test_preprocessing_images(config):
     print("Directorio de Trabajo Actual:", os.getcwd())
+    print(os.listdir())
     preprocessing = PreprocessingImages(config)
     train_generator, validation_generator = preprocessing.preprocessImages()
 

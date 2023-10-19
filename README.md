@@ -1,5 +1,7 @@
 # Monkey Species Classification
- 
+
+[![Python testing](https://github.com/josetorronteras/Monkey-Species-Classification/actions/workflows/testing.yml/badge.svg?branch=master)](https://github.com/josetorronteras/Monkey-Species-Classification/actions/workflows/testing.yml)
+
 ## Table of contents
 - [Quick start](#quick-start)
 - [Description](#description)

@@ -18,7 +18,7 @@ def mock_data():
 
     return X
 
-@pytest.mark.parametrize("config, mock_data", [
+@pytest.mark.parametrize("config", [
     (
         {
             'CNN_CONFIGURATION': {
@@ -27,8 +27,7 @@ def mock_data():
                 'POOL_SIZE': 2,
                 'NUM_CLASSES': 10
             }
-        },
-        mock_data()
+        }
     ),
 ])
 def test_model_creation(config, mock_data):
@@ -40,7 +39,7 @@ def test_model_creation(config, mock_data):
     except Exception as e:
         pytest.fail(f'Error build model: {e}')
 
-@pytest.mark.parametrize("config, mock_data", [
+@pytest.mark.parametrize("config", [
     (
         {
             'CNN_CONFIGURATION': {
@@ -49,8 +48,7 @@ def test_model_creation(config, mock_data):
                 'POOL_SIZE': 2,
                 'NUM_CLASSES': 10
             }
-        },
-        mock_data()
+        }
     ),
 ])
 def test_model_compilation(config, mock_data):

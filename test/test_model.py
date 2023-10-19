@@ -1,4 +1,4 @@
-from source.cnn_model import CNNModel
+from source.cnn_model import CNNModel, train_generator
 import configparser
 
 config = configparser.ConfigParser()

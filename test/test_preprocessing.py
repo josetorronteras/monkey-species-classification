@@ -6,8 +6,8 @@ import os
     (
         {
             'PATH_CONFIGURATION': {
-                'TRAIN_IMAGES_PATH': '/test/images/training',
-                'VALIDATION_IMAGES_PATH': '/test/images/validation'
+                'TRAIN_IMAGES_PATH': 'test/images/training',
+                'VALIDATION_IMAGES_PATH': 'test/images/validation'
             },
             'IMAGE_FEATURES': {
                 'SIZE': '150'

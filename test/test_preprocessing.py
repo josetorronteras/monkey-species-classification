@@ -5,8 +5,8 @@ from source.preprocessing_images import PreprocessingImages
     (
         {
             'PATH_CONFIGURATION': {
-                'TRAIN_IMAGES_PATH': 'images/training',
-                'VALIDATION_IMAGES_PATH': 'images/validation'
+                'TRAIN_IMAGES_PATH': 'tests/images/training',
+                'VALIDATION_IMAGES_PATH': 'tests/images/validation'
             },
             'IMAGE_FEATURES': {
                 'SIZE': '150'

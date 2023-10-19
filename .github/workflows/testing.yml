@@ -1,9 +1,6 @@
 name: Python testing
 
-on:
-  pull_request:
-    branches:
-      - '*'
+on: [push, pull_request]
 
 jobs:
   build:

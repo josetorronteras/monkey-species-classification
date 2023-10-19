@@ -1,21 +1,38 @@
 import pytest
+import numpy as np
 from source.cnn_model import CNNModel
 
-def test_model_creation():
-    config = {
-        'CNN_CONFIGURATION': {
-            'NB_FILTERS': 32,
-            'CONV_SIZE': 3,
-            'POOL_SIZE': 2,
-            'NUM_CLASSES': 10
-        }
-    }
-    
-    mock_image_data = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-    mock_batch_data = [mock_image_data]
-    mock_generator_data = [[mock_batch_data]]
+@pytest.fixture
+def mock_data():
+    num_classes = 2
+    num_images_per_class = 50
+    image_size = (24, 24)
 
-    cnn_model = CNNModel(config, mock_generator_data)
+    class1_images = np.random.randint(0, 256, size=(num_images_per_class, *image_size), dtype=np.uint8)
+    class2_images = np.random.randint(0, 256, size=(num_images_per_class, *image_size), dtype=np.uint8)
+
+    class1_images = np.expand_dims(class1_images, axis=-1)
+    class2_images = np.expand_dims(class2_images, axis=-1)
+
+    X = np.concatenate([class1_images, class2_images], axis=0)
+
+    return X
+
+@pytest.mark.parametrize("config, mock_data", [
+    (
+        {
+            'CNN_CONFIGURATION': {
+                'NB_FILTERS': 32,
+                'CONV_SIZE': 3,
+                'POOL_SIZE': 2,
+                'NUM_CLASSES': 10
+            }
+        },
+        mock_data()
+    ),
+])
+def test_model_creation(config, mock_data):
+    cnn_model = CNNModel(config, mock_data)
 
     try:
         model = cnn_model.build_model()
@@ -23,8 +40,25 @@ def test_model_creation():
     except Exception as e:
         pytest.fail(f'Error build model: {e}')
 
+@pytest.mark.parametrize("config, mock_data", [
+    (
+        {
+            'CNN_CONFIGURATION': {
+                'NB_FILTERS': 32,
+                'CONV_SIZE': 3,
+                'POOL_SIZE': 2,
+                'NUM_CLASSES': 10
+            }
+        },
+        mock_data()
+    ),
+])
+def test_model_compilation(config, mock_data):
+    cnn_model = CNNModel(config, mock_data)
+    model = cnn_model.build_model()
 
-def test_model_compilation():
-    model = CNNModel(config, train_generator[0][0][0]).build_model()
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc'])
-    assert len(model.layers) > 0
+    try:
+        model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['acc'])
+        assert len(model.layers) > 0
+    except Exception as e:
+        pytest.fail(f'Error compiling model: {e}')

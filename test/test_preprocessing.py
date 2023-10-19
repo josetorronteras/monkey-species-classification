@@ -1,3 +1,4 @@
+import pytest
 from source.preprocessing_images import PreprocessingImages
 
 @pytest.mark.parametrize("config", [
